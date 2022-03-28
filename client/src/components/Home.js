@@ -197,15 +197,14 @@ const Home = ({ user, logout }) => {
         const { data } = await axios.get("/api/conversations");
 
       const sortedData =  data.map((convo)=>{
-        const convoCopy = { ...convo, messages: [ ...convo.messages ] }
-          convoCopy.messages.sort((message, nextMessage) => {
+        convo.messages.sort((message, nextMessage) => {
           const dateA = new Date(message.createdAt);
           const dateB = new Date(nextMessage.createdAt);
           return dateA - dateB;
       })
-      return convoCopy
+      return convo
         })
-       
+
         setConversations(sortedData);
       } catch (error) {
         console.error(error);
