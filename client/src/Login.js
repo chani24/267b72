@@ -8,6 +8,7 @@ import {
   FormControl,
   TextField,
 } from '@material-ui/core';
+import AuthPagesWrapper from './components/AuthPagesWrapper';
 
 const Login = ({ user, login }) => {
   const history = useHistory();
@@ -27,14 +28,19 @@ const Login = ({ user, login }) => {
   }, [user, history]);
 
   return (
-    <Grid container justifyContent="center">
-      <Box>
-        <Grid container item>
-          <Typography>Need to register?</Typography>
+    <AuthPagesWrapper>
+     <Grid container justifyContent="center">
+      
+        <Grid className="top-nav" container item>
+          <Typography>Don't have an account?</Typography>
           <Link href="/register" to="/register">
-            <Button>Register</Button>
+            <Button>Create account</Button>
           </Link>
         </Grid>
+        <div className="main">
+        <Typography variant="h5" component="h2">
+            Welcome back!
+</Typography>
         <form onSubmit={handleLogin}>
           <Grid>
             <Grid>
@@ -54,16 +60,19 @@ const Login = ({ user, login }) => {
                 type="password"
                 name="password"
               />
+              <a className="forgot-password-link">Forgot?</a>
             </FormControl>
             <Grid>
-              <Button type="submit" variant="contained" size="large">
+              <div className="button-container"><Button type="submit">
                 Login
-              </Button>
+              </Button></div>
+              
             </Grid>
           </Grid>
-        </form>
-      </Box>
-    </Grid>
+        </form></div>
+    </Grid> 
+    </AuthPagesWrapper>
+    
   );
 };
 

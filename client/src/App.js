@@ -5,6 +5,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { theme } from './themes/theme';
 import Routes from './routes';
 import axios from 'axios';
+import "./styles/main.scss";
 
 axios.interceptors.request.use(async function (config) {
   const token = await localStorage.getItem('messenger-token');

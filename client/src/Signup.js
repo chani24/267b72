@@ -9,6 +9,7 @@ import {
   TextField,
   FormHelperText,
 } from '@material-ui/core';
+import AuthPagesWrapper from './components/AuthPagesWrapper';
 
 const Signup = ({ user, register }) => {
   const history = useHistory();
@@ -36,14 +37,18 @@ const Signup = ({ user, register }) => {
   }, [user, history]);
 
   return (
+    <AuthPagesWrapper>
     <Grid container justifyContent="center">
-      <Box>
-        <Grid container item>
-          <Typography>Need to log in?</Typography>
+        <Grid container item className="top-nav">
+          <Typography>Already have an account?</Typography>
           <Link href="/login" to="/login">
             <Button>Login</Button>
           </Link>
         </Grid>
+        <div className="main">
+        <Typography variant="h5" component="h2">
+            Create an account.
+</Typography>
         <form onSubmit={handleRegister}>
           <Grid>
             <Grid>
@@ -83,28 +88,12 @@ const Signup = ({ user, register }) => {
                 </FormHelperText>
               </FormControl>
             </Grid>
-            <Grid>
-              <FormControl error={!!formErrorMessage.confirmPassword}>
-                <TextField
-                  label="Confirm Password"
-                  aria-label="confirm password"
-                  type="password"
-                  inputProps={{ minLength: 6 }}
-                  name="confirmPassword"
-                  required
-                />
-                <FormHelperText>
-                  {formErrorMessage.confirmPassword}
-                </FormHelperText>
-              </FormControl>
-            </Grid>
-            <Button type="submit" variant="contained" size="large">
+            <div className="button-container"><Button type="submit">
               Create
-            </Button>
+            </Button></div>
           </Grid>
-        </form>
-      </Box>
-    </Grid>
+        </form></div>
+    </Grid></AuthPagesWrapper>
   );
 };
 
