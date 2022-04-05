@@ -1,17 +1,30 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { makeStyles } from "@material-ui/core/styles";
+import { useHistory } from 'react-router-dom';
 import {
   Grid,
   Box,
-  Typography,
   Button,
   FormControl,
   TextField,
   FormHelperText,
 } from '@material-ui/core';
-import AuthPagesWrapper from './components/AuthPagesWrapper';
+import AuthPagesWrapper from './components/Auth/AuthPagesWrapper';
+import RightSide from './components/Auth/RightSide'
+import {
+  form,
+  formButton,
+  formButton__container,
+} from "./styles/components/AuthPages";
+
+const useStyles = makeStyles({
+  form,
+  formButton,
+  formButton__container,
+});
 
 const Signup = ({ user, register }) => {
+  const classes = useStyles();
   const history = useHistory();
 
   const [formErrorMessage, setFormErrorMessage] = useState({});
@@ -38,18 +51,15 @@ const Signup = ({ user, register }) => {
 
   return (
     <AuthPagesWrapper>
-    <Grid container justifyContent="center">
-        <Grid container item className="top-nav">
-          <Typography>Already have an account?</Typography>
-          <Link href="/login" to="/login">
-            <Button>Login</Button>
-          </Link>
-        </Grid>
-        <div className="main">
-        <Typography variant="h5" component="h2">
-            Create an account.
-</Typography>
-        <form onSubmit={handleRegister}>
+      <RightSide
+        notice={{
+          text: "Already have an account ?",
+          buttonText: "Login",
+          link: "/login",
+        }}
+        heading="Create an account."
+      >
+        <form onSubmit={handleRegister} className={classes.form}>
           <Grid>
             <Grid>
               <FormControl>
@@ -103,12 +113,15 @@ const Signup = ({ user, register }) => {
                 </FormHelperText>
               </FormControl>
             </Grid>
-            <div className="button-container"><Button type="submit">
-              Create
-            </Button></div>
+            <Box className={classes.formButton__container}>
+              <Button type="submit" className={classes.formButton}>
+                Create
+              </Button>
+            </Box>
           </Grid>
-        </form></div>
-    </Grid></AuthPagesWrapper>
+        </form>
+      </RightSide>
+    </AuthPagesWrapper>
   );
 };
 

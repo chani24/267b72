@@ -1,16 +1,31 @@
 import React, { useEffect } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { makeStyles } from "@material-ui/core/styles";
+import { useHistory } from 'react-router-dom';
 import {
   Grid,
   Box,
-  Typography,
   Button,
   FormControl,
   TextField,
 } from '@material-ui/core';
-import AuthPagesWrapper from './components/AuthPagesWrapper';
+import AuthPagesWrapper from './components/Auth/AuthPagesWrapper';
+import RightSide from './components/Auth/RightSide';
+import { form, formButton, formButton__container } from './styles/components/AuthPages';
 
+const useStyles = makeStyles({
+  form,
+  formButton,
+  formButton__container,
+  forgotPasswordLink : {
+  position: "absolute",
+  right: 0,
+  bottom: "24px",
+  fontSize: "12px",
+  color: "#3A8DFF",
+}
+});
 const Login = ({ user, login }) => {
+    const classes = useStyles();
   const history = useHistory();
 
   const handleLogin = async (event) => {
@@ -29,19 +44,8 @@ const Login = ({ user, login }) => {
 
   return (
     <AuthPagesWrapper>
-     <Grid container justifyContent="center">
-      
-        <Grid className="top-nav" container item>
-          <Typography>Don't have an account?</Typography>
-          <Link href="/register" to="/register">
-            <Button>Create account</Button>
-          </Link>
-        </Grid>
-        <div className="main">
-        <Typography variant="h5" component="h2">
-            Welcome back!
-</Typography>
-        <form onSubmit={handleLogin}>
+        <RightSide notice={{text: 'Don\'t have an account?', buttonText: 'Create account', link: '/register'}} heading='Welcome back!'>
+        <form onSubmit={handleLogin} className={classes.form}>
           <Grid>
             <Grid>
               <FormControl margin="normal" required>
@@ -60,17 +64,16 @@ const Login = ({ user, login }) => {
                 type="password"
                 name="password"
               />
-              <a className="forgot-password-link">Forgot?</a>
+              <a className={classes.forgotPasswordLink}>Forgot?</a>
             </FormControl>
             <Grid>
-              <div className="button-container"><Button type="submit">
+              <Box className={classes.formButton__container}><Button type="submit" className={classes.formButton}>
                 Login
-              </Button></div>
+              </Button></Box>
               
             </Grid>
           </Grid>
-        </form></div>
-    </Grid> 
+        </form></RightSide>
     </AuthPagesWrapper>
     
   );
