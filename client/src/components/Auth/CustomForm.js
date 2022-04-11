@@ -1,4 +1,4 @@
-import React from "react";
+import React from "react"
 import { makeStyles } from "@material-ui/core/styles";
 
 const primaryBlue = "#3A8DFF";
@@ -37,8 +37,10 @@ const useStyles = makeStyles({
   },
 });
 const CustomForm = ({ children }) => {
-  const classes = useStyles();
-  return React.cloneElement(children, { classes });
+  const classes = useStyles()
+  
+  return (
+    <>{React.cloneElement(children, { classes: classes })}</>)
 };
 
 export default CustomForm;

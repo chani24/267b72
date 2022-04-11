@@ -8,7 +8,7 @@ import {
   TextField,
 } from '@material-ui/core';
 import AuthPagesWrapper from './components/Auth/AuthPagesWrapper';
-import CustomForm from './components/Auth/Form'
+import CustomForm from './components/Auth/CustomForm'
 import RightSide from './components/Auth/RightSide';
 
 const Login = ({ user, login}) => {
@@ -74,7 +74,7 @@ const Login = ({ user, login}) => {
         heading="Welcome back!"
       >
         <CustomForm>
-          <Form />
+          <Form></Form>
         </CustomForm>
       </RightSide>
     </AuthPagesWrapper>

@@ -9,7 +9,7 @@ import {
   FormHelperText,
 } from '@material-ui/core';
 import AuthPagesWrapper from './components/Auth/AuthPagesWrapper';
-import CustomForm from "./components/Auth/Form";
+import CustomForm from "./components/Auth/CustomForm";
 import RightSide from './components/Auth/RightSide'
 
 const Signup = ({ user, register }) => {
@@ -114,7 +114,7 @@ const Signup = ({ user, register }) => {
         heading="Create an account."
       >
         <CustomForm>
-          <Form/>
+          <Form></Form>
         </CustomForm>
       </RightSide>
     </AuthPagesWrapper>
