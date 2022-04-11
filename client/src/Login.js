@@ -70,7 +70,6 @@ const Login = ({ user, login}) => {
           buttonText: "Create account",
           link: "/register",
         }}
-        
         heading="Welcome back!"
       >
         <CustomForm>

@@ -4,7 +4,7 @@ import chatImage from "../../assets/images/chat.svg";
 import background from "../../assets/images/side-banner.png";
 import { Box, Typography } from "@material-ui/core";
 
-const useStyles = makeStyles(theme=>({
+const useStyles = makeStyles((theme) => ({
   authWrapper: {
     position: "relative",
     height: "100vh",
@@ -22,7 +22,7 @@ const useStyles = makeStyles(theme=>({
     flexDirection: "column",
     alignItems: "center",
     paddingTop: "199px",
-    [theme.breakpoints.down('md')]: {
+    [theme.breakpoints.down("sm")]: {
       display: "none",
     },
   },
@@ -37,7 +37,7 @@ const useStyles = makeStyles(theme=>({
     flex: "0 0 auto",
     height: "100vh",
     width: "60%",
-    "@media (max-width: 425px)": {
+    [theme.breakpoints.down("sm")]: {
       width: "100%",
     },
   },

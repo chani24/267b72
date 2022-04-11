@@ -121,4 +121,4 @@ const Signup = ({ user, register }) => {
   );
 };
 
-export default CustomForm(Signup);
+export default Signup;
