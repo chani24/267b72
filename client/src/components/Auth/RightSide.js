@@ -3,7 +3,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
 import { Box, Typography, Grid, Button } from "@material-ui/core";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => (
+  {
   topNav: {
     justifyContent: "end",
     padding: "24px",
@@ -32,7 +33,7 @@ const useStyles = makeStyles({
     flexDirection: "column",
     alignItems: "center",
     padding: "0 160px",
-    "@media (max-width: 425px)": {
+    [theme.breakpoints.down("md")]: {
       padding: "0 48px",
     },
   },
@@ -43,7 +44,7 @@ const useStyles = makeStyles({
     fontSize: "26px",
     lineHeight: "40px",
   },
-});
+}));
 
 const Wrapper = ({ children, notice, heading }) => {
   const classes = useStyles();
@@ -51,7 +52,7 @@ const Wrapper = ({ children, notice, heading }) => {
     <Grid container justifyContent="center">
       <Grid className={classes.topNav} container item>
         <Typography className={classes.topNav__p}>{notice.text}</Typography>
-        <Link href={notice.link} to={notice.link} className={classes.topNav__a}>
+        <Link to={notice.link} className={classes.topNav__a}>
           <Button className={classes.topNav__button}>
             {notice.buttonText}
           </Button>

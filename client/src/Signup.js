@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { makeStyles } from "@material-ui/core/styles";
 import { useHistory } from 'react-router-dom';
 import {
   Grid,
@@ -10,21 +9,10 @@ import {
   FormHelperText,
 } from '@material-ui/core';
 import AuthPagesWrapper from './components/Auth/AuthPagesWrapper';
+import CustomForm from "./components/Auth/Form";
 import RightSide from './components/Auth/RightSide'
-import {
-  form,
-  formButton,
-  formButton__container,
-} from "./styles/components/AuthPages";
-
-const useStyles = makeStyles({
-  form,
-  formButton,
-  formButton__container,
-});
 
 const Signup = ({ user, register }) => {
-  const classes = useStyles();
   const history = useHistory();
 
   const [formErrorMessage, setFormErrorMessage] = useState({});
@@ -45,6 +33,72 @@ const Signup = ({ user, register }) => {
     await register({ username, email, password });
   };
 
+  const Form = ({classes}) => {
+    return (
+      <form onSubmit={handleRegister} className={classes.form}>
+        <Grid>
+          <Grid>
+            <FormControl>
+              <TextField
+                aria-label="username"
+                label="Username"
+                name="username"
+                type="text"
+                required
+              />
+            </FormControl>
+          </Grid>
+          <Grid>
+            <FormControl>
+              <TextField
+                label="E-mail address"
+                aria-label="e-mail address"
+                type="email"
+                name="email"
+                required
+              />
+            </FormControl>
+          </Grid>
+          <Grid>
+            <FormControl error={!!formErrorMessage.confirmPassword}>
+              <TextField
+                aria-label="password"
+                label="Password"
+                type="password"
+                inputProps={{ minLength: 6 }}
+                name="password"
+                required
+              />
+              <FormHelperText>
+                {formErrorMessage.confirmPassword}
+              </FormHelperText>
+            </FormControl>
+          </Grid>
+          <Grid>
+            <FormControl error={!!formErrorMessage.confirmPassword}>
+              <TextField
+                label="Confirm Password"
+                aria-label="confirm password"
+                type="password"
+                inputProps={{ minLength: 6 }}
+                name="confirmPassword"
+                required
+              />
+              <FormHelperText>
+                {formErrorMessage.confirmPassword}
+              </FormHelperText>
+            </FormControl>
+          </Grid>
+          <Box className={classes.formButton__container}>
+            <Button type="submit" className={classes.formButton}>
+              Create
+            </Button>
+          </Box>
+        </Grid>
+      </form>
+    );
+  }
+
   useEffect(() => {
     if (user && user.id) history.push('/home');
   }, [user, history]);
@@ -59,70 +113,12 @@ const Signup = ({ user, register }) => {
         }}
         heading="Create an account."
       >
-        <form onSubmit={handleRegister} className={classes.form}>
-          <Grid>
-            <Grid>
-              <FormControl>
-                <TextField
-                  aria-label="username"
-                  label="Username"
-                  name="username"
-                  type="text"
-                  required
-                />
-              </FormControl>
-            </Grid>
-            <Grid>
-              <FormControl>
-                <TextField
-                  label="E-mail address"
-                  aria-label="e-mail address"
-                  type="email"
-                  name="email"
-                  required
-                />
-              </FormControl>
-            </Grid>
-            <Grid>
-              <FormControl error={!!formErrorMessage.confirmPassword}>
-                <TextField
-                  aria-label="password"
-                  label="Password"
-                  type="password"
-                  inputProps={{ minLength: 6 }}
-                  name="password"
-                  required
-                />
-                <FormHelperText>
-                  {formErrorMessage.confirmPassword}
-                </FormHelperText>
-              </FormControl>
-            </Grid>
-            <Grid>
-              <FormControl error={!!formErrorMessage.confirmPassword}>
-                <TextField
-                  label="Confirm Password"
-                  aria-label="confirm password"
-                  type="password"
-                  inputProps={{ minLength: 6 }}
-                  name="confirmPassword"
-                  required
-                />
-                <FormHelperText>
-                  {formErrorMessage.confirmPassword}
-                </FormHelperText>
-              </FormControl>
-            </Grid>
-            <Box className={classes.formButton__container}>
-              <Button type="submit" className={classes.formButton}>
-                Create
-              </Button>
-            </Box>
-          </Grid>
-        </form>
+        <CustomForm>
+          <Form/>
+        </CustomForm>
       </RightSide>
     </AuthPagesWrapper>
   );
 };
 
-export default Signup;
+export default CustomForm(Signup);

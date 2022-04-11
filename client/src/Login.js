@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { makeStyles } from "@material-ui/core/styles";
 import { useHistory } from 'react-router-dom';
 import {
   Grid,
@@ -9,23 +8,10 @@ import {
   TextField,
 } from '@material-ui/core';
 import AuthPagesWrapper from './components/Auth/AuthPagesWrapper';
+import CustomForm from './components/Auth/Form'
 import RightSide from './components/Auth/RightSide';
-import { form, formButton, formButton__container } from './styles/components/AuthPages';
 
-const useStyles = makeStyles({
-  form,
-  formButton,
-  formButton__container,
-  forgotPasswordLink : {
-  position: "absolute",
-  right: 0,
-  bottom: "24px",
-  fontSize: "12px",
-  color: "#3A8DFF",
-}
-});
-const Login = ({ user, login }) => {
-    const classes = useStyles();
+const Login = ({ user, login}) => {
   const history = useHistory();
 
   const handleLogin = async (event) => {
@@ -42,10 +28,9 @@ const Login = ({ user, login }) => {
     if (user && user.id) history.push('/home');
   }, [user, history]);
 
-  return (
-    <AuthPagesWrapper>
-        <RightSide notice={{text: 'Don\'t have an account?', buttonText: 'Create account', link: '/register'}} heading='Welcome back!'>
-        <form onSubmit={handleLogin} className={classes.form}>
+  const Form = ({classes}) => {
+    return (
+      <form onSubmit={handleLogin} className={classes.form}>
           <Grid>
             <Grid>
               <FormControl margin="normal" required>
@@ -73,9 +58,25 @@ const Login = ({ user, login }) => {
               
             </Grid>
           </Grid>
-        </form></RightSide>
+        </form>
+    )
+  }
+
+  return (
+    <AuthPagesWrapper>
+      <RightSide
+        notice={{
+          text: "Don't have an account?",
+          buttonText: "Create account",
+          link: "/register",
+        }}
+        heading="Welcome back!"
+      >
+        <CustomForm>
+          <Form />
+        </CustomForm>
+      </RightSide>
     </AuthPagesWrapper>
-    
   );
 };
 
