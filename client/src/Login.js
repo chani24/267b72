@@ -1,15 +1,17 @@
 import React, { useEffect } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import {
   Grid,
   Box,
-  Typography,
   Button,
   FormControl,
   TextField,
 } from '@material-ui/core';
+import AuthPagesWrapper from './components/Auth/AuthPagesWrapper';
+import CustomForm from './components/Auth/CustomForm'
+import RightSide from './components/Auth/RightSide';
 
-const Login = ({ user, login }) => {
+const Login = ({ user, login}) => {
   const history = useHistory();
 
   const handleLogin = async (event) => {
@@ -26,16 +28,9 @@ const Login = ({ user, login }) => {
     if (user && user.id) history.push('/home');
   }, [user, history]);
 
-  return (
-    <Grid container justifyContent="center">
-      <Box>
-        <Grid container item>
-          <Typography>Need to register?</Typography>
-          <Link href="/register" to="/register">
-            <Button>Register</Button>
-          </Link>
-        </Grid>
-        <form onSubmit={handleLogin}>
+  const Form = ({classes}) => {
+    return (
+      <form onSubmit={handleLogin} className={classes.form}>
           <Grid>
             <Grid>
               <FormControl margin="normal" required>
@@ -54,16 +49,34 @@ const Login = ({ user, login }) => {
                 type="password"
                 name="password"
               />
+              <a className={classes.forgotPasswordLink}>Forgot?</a>
             </FormControl>
             <Grid>
-              <Button type="submit" variant="contained" size="large">
+              <Box className={classes.formButton__container}><Button type="submit" className={classes.formButton}>
                 Login
-              </Button>
+              </Button></Box>
+              
             </Grid>
           </Grid>
         </form>
-      </Box>
-    </Grid>
+    )
+  }
+
+  return (
+    <AuthPagesWrapper>
+      <RightSide
+        notice={{
+          text: "Don't have an account?",
+          buttonText: "Create account",
+          link: "/register",
+        }}
+        heading="Welcome back!"
+      >
+        <CustomForm>
+          <Form></Form>
+        </CustomForm>
+      </RightSide>
+    </AuthPagesWrapper>
   );
 };
 
