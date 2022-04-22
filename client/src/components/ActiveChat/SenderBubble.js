@@ -13,7 +13,7 @@ const useStyles = makeStyles(() => ({
     color: "#BECCE2",
     fontWeight: "bold",
     marginBottom: 5,
-    marginTop: 5
+    marginTop: 5,
   },
   text: {
     fontSize: 14,
@@ -37,16 +37,23 @@ const SenderBubble = ({ time, text, attachments }) => {
 
   return (
     <Box className={classes.root}>
-      {(text !== ""|| !attachments?.length < 1) && (
+      {(text !== "" || !attachments?.length < 1) && (
         <Typography className={classes.date}>{time}</Typography>
       )}
 
       {attachments?.length > 0 && (
-        <div>
+        <Box>
           {attachments.map((url, index) => {
-            return <img src={url} key={index} className={classes.image} />;
+            return (
+              <img
+                src={url}
+                key={index}
+                className={classes.image}
+                alt="attachment"
+              />
+            );
           })}
-        </div>
+        </Box>
       )}
       <Box className={classes.bubble}>
         {text !== "" && (

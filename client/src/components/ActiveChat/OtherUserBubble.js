@@ -1,10 +1,10 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Box, Typography, Avatar } from '@material-ui/core';
+import React from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import { Box, Typography, Avatar } from "@material-ui/core";
 
 const useStyles = makeStyles(() => ({
   root: {
-    display: 'flex',
+    display: "flex",
   },
   avatar: {
     height: 30,
@@ -14,24 +14,24 @@ const useStyles = makeStyles(() => ({
   },
   usernameDate: {
     fontSize: 11,
-    color: '#BECCE2',
-    fontWeight: 'bold',
+    color: "#BECCE2",
+    fontWeight: "bold",
     marginBottom: 5,
   },
   bubble: {
-    backgroundImage: 'linear-gradient(225deg, #6CC1FF 0%, #3A8DFF 100%)',
-    borderRadius: '0 10px 10px 10px',
+    backgroundImage: "linear-gradient(225deg, #6CC1FF 0%, #3A8DFF 100%)",
+    borderRadius: "0 10px 10px 10px",
   },
   text: {
     fontSize: 14,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
+    fontWeight: "bold",
+    color: "#FFFFFF",
     letterSpacing: -0.2,
     padding: 8,
   },
 }));
 
-const OtherUserBubble = ({ text, time, otherUser }) => {
+const OtherUserBubble = ({ text, time, otherUser, attachments }) => {
   const classes = useStyles();
 
   return (
@@ -42,11 +42,29 @@ const OtherUserBubble = ({ text, time, otherUser }) => {
         className={classes.avatar}
       />
       <Box>
-        <Typography className={classes.usernameDate}>
-          {otherUser.username} {time}
-        </Typography>
+        {(text !== "" || !attachments?.length < 1) && (
+          <Typography className={classes.usernameDate}>
+            {otherUser.username} {time}
+          </Typography>
+        )}
+        {attachments?.length > 0 && (
+          <Box>
+            {attachments.map((url, index) => {
+              return (
+                <img
+                  src={url}
+                  key={index}
+                  className={classes.image}
+                  alt="attachment"
+                />
+              );
+            })}
+          </Box>
+        )}
         <Box className={classes.bubble}>
-          <Typography className={classes.text}>{text}</Typography>
+          {text !== "" && (
+            <Typography className={classes.text}>{text}</Typography>
+          )}
         </Box>
       </Box>
     </Box>

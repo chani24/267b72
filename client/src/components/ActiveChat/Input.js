@@ -1,8 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { FormControl, FilledInput } from "@material-ui/core";
+import axios from "axios";
 import PreviewImage from "./PreviewImage";
 import { makeStyles } from "@material-ui/core/styles";
-import cameraImage from "../../assets/images/camera.png";
+import fileImage from "../../assets/images/file.png";
+import emojiImage from "../../assets/images/emoji.png";
+
+const shareImageStyles = {
+  height: "24px",
+  width: "24px",
+  position: "absolute",
+  top: "50%",
+  transform: "translate(0, -70%)",
+};
+
 const useStyles = makeStyles(() => ({
   root: {
     justifySelf: "flex-end",
@@ -14,13 +25,13 @@ const useStyles = makeStyles(() => ({
     borderRadius: 8,
     marginBottom: 20,
   },
+  emojiStyle: {
+    right: "64px",
+    ...shareImageStyles,
+  },
   imageStyle: {
-    height: "32px",
-    width: "32px",
-    position: "absolute",
     right: "16px",
-    top: "50%",
-    transform: "translate(0, -70%)",
+    ...shareImageStyles,
   },
 }));
 
@@ -36,14 +47,16 @@ const Input = ({ otherUser, conversationId, user, postMessage }) => {
       setPreview([]);
       return;
     }
-    const previewURLs = []
+    const previewURLs = [];
     for (let i = 0; i < selectedFiles.length; i++) {
       const objectUrl = URL.createObjectURL(selectedFiles[i]);
-      previewURLs.push(objectUrl)
-     }
+      previewURLs.push(objectUrl);
+    }
     setPreview(previewURLs);
 
-    return () => {previewURLs.forEach((url)=>URL.revokeObjectURL(url))};
+    return () => {
+      previewURLs.forEach((url) => URL.revokeObjectURL(url));
+    };
   }, [selectedFiles]);
 
   const handleClick = (e) => {
@@ -59,10 +72,12 @@ const Input = ({ otherUser, conversationId, user, postMessage }) => {
   });
   const onSelectFile = (e) => {
     if (!e.target.files || e.target.files.length === 0) {
-      setSelectedFiles([]);
       return;
     }
-    setSelectedFiles(e.target.files);
+
+    const newFiles = [...selectedFiles];
+    newFiles.push(...Object.values(e.target.files));
+    setSelectedFiles(newFiles);
   };
 
   const handleChange = (event) => {
@@ -79,52 +94,62 @@ const Input = ({ otherUser, conversationId, user, postMessage }) => {
       sender: conversationId ? null : user,
     };
 
-    const url = await uploadImage();
-    if (url) reqBody.attachments = [...url];
+    const urls = await uploadImage(selectedFiles);
+    if (urls) reqBody.attachments = [...urls];
 
     await postMessage(reqBody);
     setText("");
     setSelectedFiles([]);
   };
 
-  const uploadImage = async() => {
+  const uploadImage = async (selectedFiles) => {
     if (selectedFiles.length < 1) return null;
-    
-    const urls = []
-    for (let i = 0; i < selectedFiles.length; i++) {
-    const formData = new FormData();
-    formData.append("file", selectedFiles[i]);
-    formData.append("upload_preset", "ynb4jbls");
+    const urls = [];
+    const uploadedImages = await axios.all(
+      selectedFiles.map((file) => {
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("upload_preset", process.env.REACT_APP_UPLOAD_PRESET);
+        return axios.post(
+          "https://api.cloudinary.com/v1_1/ddkuhs8ax/auto/upload",
+          formData,
+          {
+            transformRequest: [
+              (data, headers) => {
+                delete headers["x-access-token"];
+                return data;
+              },
+            ],
+          }
+        );
+      })
+    );
 
-    
-   await fetch("https://api.cloudinary.com/v1_1/ddkuhs8ax/auto/upload", {
-      method: "POST",
-      body: formData,
-    })
-      .then((res) => res.json())
-      .then((data) => urls.push(data.url))
-      .catch((err) => console.log(err));
-     }
+    uploadedImages.forEach((imageData) => {
+      urls.push(imageData.data.url);
+    });
 
-    return urls
+    return urls;
   };
 
   const removeImagePreview = (index) => {
-    const previewClone = [...preview]
-    previewClone.splice(index, 1)
-    setPreview(previewClone)
-  }
+    const previewClone = [...preview];
+    previewClone.splice(index, 1);
+    setPreview(previewClone);
+  };
 
   return (
     <form className={classes.root}>
-      {preview.length >= 1 &&  preview.map((url, index) => {
-            return (
-              <PreviewImage key={index} url={url} onClose={() => removeImagePreview(index)} />
-            )
-          
-        })
-        
-      }
+      {preview.length >= 1 &&
+        preview.map((url, index) => {
+          return (
+            <PreviewImage
+              key={url}
+              url={url}
+              onClose={() => removeImagePreview(index)}
+            />
+          );
+        })}
       <FormControl fullWidth hiddenLabel>
         <FilledInput
           classes={{ root: classes.input }}
@@ -135,11 +160,17 @@ const Input = ({ otherUser, conversationId, user, postMessage }) => {
           onChange={handleChange}
         />
         <img
-          src={cameraImage}
+          src={emojiImage}
+          className={classes.emojiStyle}
+          alt="emoji picker"
+        />
+        <img
+          src={fileImage}
           className={classes.imageStyle}
           onClick={() => {
             imageInput.click();
           }}
+          alt="file picker"
         />
         <input
           ref={(input) => (imageInput = input)}
